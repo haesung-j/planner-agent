@@ -1,24 +1,24 @@
 from typing import cast
 from langchain_core.messages import AIMessage
 from langgraph.prebuilt import ToolNode
-from datetime import datetime
 
-from app.agents.calendar_agent.tools import calendar_tools
+from app.agents.place_researcher.tools import (
+    web_search,
+    search_place,
+    get_place_reviews,
+)
 from app.config import config
-from app.agents.calendar_agent.chains import create_calendar_chain
+from app.agents.place_researcher.chains import create_place_researcher_chain
 from app.agents.base import BaseNode
 
 
-class CalendarAgent(BaseNode):
-    def __init__(self, name: str = "CalendarAgent", **kwargs):
+class PlaceResearcherAgent(BaseNode):
+    def __init__(self, name: str = "PlaceResearcherAgent", **kwargs):
         super().__init__(name, **kwargs)
-        self.model_name = config.CALENDAR_AGENT_MODEL
+        self.model_name = config.PLACE_RESEARCHER_MODEL
 
     async def arun(self, state):
-        current_date = datetime.now().strftime("%Y-%m-%d")
-        current_time = datetime.now().strftime("%H:%M:%S")
-
-        chain = create_calendar_chain(self.model_name, current_date, current_time)
+        chain = create_place_researcher_chain(self.model_name)
 
         response = cast(
             AIMessage,
@@ -38,6 +38,14 @@ class CalendarAgent(BaseNode):
         return {"messages": [response]}
 
 
-class CalendarTools(ToolNode):
+class PlaceResearcherTools(ToolNode):
     def __init__(self, **kwargs):
-        super().__init__(tools=calendar_tools, name="calendar_tools", **kwargs)
+        super().__init__(
+            tools=[
+                web_search,
+                search_place,
+                # get_place_reviews
+            ],
+            name="place_researcher_tools",
+            **kwargs,
+        )

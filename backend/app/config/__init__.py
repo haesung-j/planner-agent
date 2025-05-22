@@ -15,6 +15,13 @@ class Config:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
+    CALENDAR_AGENT_MODEL = os.getenv("CALENDAR_AGENT_MODEL")
+    ITINERARY_PlANNER_MODEL = os.getenv("ITINERARY_PlANNER_MODEL")
+    GENERAL_CONVERSATION_MODEL = os.getenv("GENERAL_CONVERSATION_MODEL")
+    PLACE_RESEARCHER_MODEL = os.getenv("PLACE_RESEARCHER_MODEL")
+
+    SUPERVISOR_MODEL = os.getenv("SUPERVISOR_MODEL")
+
 
 # Create a config instance
 config = Config()
