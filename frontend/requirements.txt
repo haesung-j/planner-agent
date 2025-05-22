@@ -1,0 +1,3 @@
+streamlit
+requests # 백엔드 API 호출용
+# 기타 필요한 Streamlit 컴포넌트나 라이브러리 추가 

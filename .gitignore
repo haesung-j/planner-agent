@@ -176,3 +176,7 @@ cython_debug/
 # Jupyter Notebook
 *.ipynb
 .gitmessage.txt
+
+# Google Calendar
+credentials.json
+token.json

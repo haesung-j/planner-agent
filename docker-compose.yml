@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000" # LangGraph API 서버 포트
+    volumes:
+      - ./backend:/app
+    environment:
+      - LANGFUSE_HOST=http://langfuse:3000
+      - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY} # .env 파일 등에서 관리
+      - LANGFUSE_SECRET_KEY=${LANGFUSE_SECRET_KEY} # .env 파일 등에서 관리
+      # 필요한 다른 환경 변수들 (예: OpenAI API 키)
+      # - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - langfuse
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8501:8501" # Streamlit 기본 포트
+    volumes:
+      - ./frontend:/app
+    environment:
+      # 백엔드 API 주소 설정
+      - BACKEND_API_URL=http://backend:8000 
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80" # 외부 접속 포트
+    depends_on:
+      - frontend
+    networks:
+      - app-network
+    healthcheck:
+      test: curl -f http://localhost/docs
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  langfuse-server:
+    image: langfuse/langfuse:latest # Langfuse 공식 이미지 사용
+    ports:
+      - "3000:3000" # Langfuse UI 포트
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@langfuse-db:5432/${POSTGRES_DB}
+      - LANGFUSE_SALT=${LANGFUSE_SALT} # .env 파일 등에서 관리, 임의의 긴 문자열
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET} # .env 파일 등에서 관리, 임의의 긴 문자열
+      - NEXTAUTH_URL=http://localhost:3000 # 실제 배포 시에는 도메인으로 변경
+    depends_on:
+      langfuse-db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  langfuse-db:
+    image: postgres:15
+    restart: always
+    ports: # 개발 시에만 외부 노출, 운영 시에는 제거 고려
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER} # .env 파일 등에서 관리
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD} # .env 파일 등에서 관리
+      - POSTGRES_DB=${POSTGRES_DB} # .env 파일 등에서 관리
+    volumes:
+      - langfuse_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+volumes:
+  langfuse_pg_data:
+
+networks:
+  app-network:
+    driver: bridge
+
+# 참고: ${VARIABLE_NAME} 형태의 변수들은 루트 디렉터리에 .env 파일을 만들어 관리하는 것이 좋습니다.
+# 예시 .env 파일 내용:
+# LANGFUSE_PUBLIC_KEY=pk-lf-...
+# LANGFUSE_SECRET_KEY=sk-lf-...
+# POSTGRES_USER=langfuse
+# POSTGRES_PASSWORD=yoursecurepassword
+# POSTGRES_DB=langfuse
+# LANGFUSE_SALT=randomlongstringforsalt
+# NEXTAUTH_SECRET=randomlongstringfornextauthsecret
+# OPENAI_API_KEY=your_openai_api_key (필요하다면) 

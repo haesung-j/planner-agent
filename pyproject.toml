@@ -1,0 +1,26 @@
+[project]
+name = "planner"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.12",
+    "folium>=0.19.6",
+    "googlemaps>=4.10.0",
+    "langchain>=0.3.25",
+    "langchain-google-community[calendar]>=2.0.7",
+    "langchain-openai>=0.3.17",
+    "langchain-tavily>=0.1.6",
+    "langgraph>=0.4.5",
+    "langgraph-supervisor>=0.0.22",
+    "python-dotenv>=1.1.0",
+    "streamlit>=1.45.1",
+    "streamlit-folium>=0.25.0",
+    "uvicorn[standard]>=0.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+]

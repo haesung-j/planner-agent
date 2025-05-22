@@ -1,0 +1,7 @@
+langchain
+langgraph
+langchain-openai # 또는 사용하시는 LLM provider 패키지
+fastapi # API 서버를 위해 (선택 사항, langserve 사용 시 자동 설치될 수 있음)
+uvicorn # FastAPI 실행을 위해 (선택 사항)
+langfuse # Langfuse SDK
+# 기타 필요한 라이브러리 추가 
