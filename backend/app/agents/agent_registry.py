@@ -41,7 +41,7 @@ AGENTS_REGISTRY: Dict[str, AgentInfo] = {
     "message_agent": {
         # "description": "specialized agent to have a general conversation with the user",
         "description": "specialized agent to have a conversation with the user",
-        "enabled": True,
+        "enabled": False,
     },
     "itinerary_planner": {
         "description": "specialized agent to create an itinerary plan. This agent is an agent that creates a itinerary based on a given set of places, so **it SHOULD ONLY be called when enough requirements have been collected from the other agents.**> ** DO NOT** invoke itinerary_planner directly if no prior search has occurred.",

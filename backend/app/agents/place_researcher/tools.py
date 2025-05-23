@@ -8,7 +8,7 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 from app.config import config
 
 
-client = googlemaps.Client(key=config.GOOGLE_API_KEY)
+client = googlemaps.Client(key=config.GOOGLE_MAP_API_KEY)
 
 
 @tool(parse_docstring=True)

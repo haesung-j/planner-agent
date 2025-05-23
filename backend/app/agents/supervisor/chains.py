@@ -8,15 +8,19 @@ from app.agents.agent_registry import (
     get_agents_description,
     AgentName,
 )
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 
 class RouteResponse(BaseModel):
     reason: Annotated[str, "reason for the decision"]
     next: Annotated[
         AgentName,
-        "next agent to route to. To get a response from the user, return the message_agent.",
+        "next agent to route to. To get a response from the user, return the itinerary_planner.",
     ]
-    exaplain: Annotated[str, "Explain to the user what you're going to do"]
+    notification: Annotated[
+        str,
+        "Notification to display to the user. Write the message 'Calling agent name...' to indicate which agent was called.",
+    ]
 
 
 def create_supervisor_chain(model_name: str) -> RunnableSequence:
@@ -41,6 +45,8 @@ def create_supervisor_chain(model_name: str) -> RunnableSequence:
 
     if model_name == "o3-mini":
         model = ChatOpenAI(model=model_name, temperature=1.0)
+    elif model_name == "gemini-1.5-flash":
+        model = ChatGoogleGenerativeAI(model=model_name, temperature=0.1)
     else:
         model = ChatOpenAI(model=model_name, temperature=0.1)
 

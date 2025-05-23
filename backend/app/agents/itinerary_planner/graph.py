@@ -2,36 +2,33 @@ from langgraph.graph import StateGraph, START, END
 
 from app.agents.itinerary_planner.nodes import (
     ItineraryPlannerAgent,
+    ItineraryInformationGatherer,
+    add_tool_message,
 )
 
-# from app.agents.itinerary_planner.edges import route_output
 from app.agents.itinerary_planner.state import AgentState
-
-
+from app.agents.itinerary_planner.edges import get_state
 from langgraph.checkpoint.memory import MemorySaver
 
 
 def create_itinerary_planner_agent():
     flow = StateGraph(AgentState)
-    flow.add_node("call_model", ItineraryPlannerAgent())
-    # flow.add_node("tools", PlaceResearcherTools())
-    # flow.add_node("respond", PlaceResponse())
+    flow.add_node("gather_info", ItineraryInformationGatherer())
+    flow.add_node("generate_itinerary", ItineraryPlannerAgent())
+    flow.add_node("add_tool_message", add_tool_message)
 
-    flow.add_edge(START, "call_model")
-    # Add a conditional edge to determine the next step after `call_model`
-    # flow.add_conditional_edges(
-    #     "call_model",
-    #     # After call_model finishes running, the next node(s) are scheduled
-    #     # based on the output from route_model_output
-    #     route_output,
-    # )
+    flow.add_edge(START, "gather_info")
+    flow.add_conditional_edges(
+        "gather_info",
+        get_state,
+        {
+            "add_tool_message": "add_tool_message",
+            END: END,
+        },
+    )
+    flow.add_edge("add_tool_message", "generate_itinerary")
+    flow.add_edge("generate_itinerary", END)
 
-    # Add a normal edge from `tools` to `call_model`
-    # This creates a cycle: after using tools, we always return to the model
-    # flow.add_edge("tools", "call_model")
-    flow.add_edge("call_model", END)
-
-    memory = MemorySaver()
-    # Compile the builder into an executable graph
-    graph = flow.compile(name="itinerary_planner", checkpointer=memory)
+    # memory = MemorySaver()
+    graph = flow.compile(name="itinerary_planner")
     return graph

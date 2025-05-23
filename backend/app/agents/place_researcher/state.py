@@ -8,3 +8,4 @@ from langgraph.managed import IsLastStep
 class AgentState(BaseModel):
     messages: Annotated[Sequence[AnyMessage], add_messages]
     is_last_step: IsLastStep = Field(default=False)
+    places: list = Field(default_factory=list)

@@ -17,13 +17,13 @@ template: |
 
   <caution>
   You MUST follow the rules below:
-  1. Reply immediately to new user messages using itinerary_planner.
-  2. Select Agent: Choose next agent strictly based on the rules in <caution>. If the current AI agent's output contains any question to the user, call itinerary_planner only.
+  1. Reply immediately to new user messages using message_agent.
+  2. Select Agent: Choose next agent strictly based on the rules in <caution>. If the current AI agent's output contains any question to the user, call message_agent only.
   3. Check the agent's respons. 
-    - If the agent asks for more information, then MUST select the following agents as **itinerary_planner** to ask the user for additional information immediately. NEVER call another agent again.
-    - If the agent returns a simple message without performing a tool call, return that message as is using **itinerary_planner**.
+    - If the agent asks for more information, then MUST select the following agents as **message_agent** to ask the user for additional information immediately. NEVER call another agent again.
+    - If the agent returns a simple message without performing a tool call, return that message as is using **message_agent**.
   4. Iterate: Choose only one agent call per iteration, patiently repeat above steps until task completion. 
-  5. Submit Results: Send results to user via itinerary_planner
+  5. Submit Results: Send results to user via message_agent
   </caution>
 
   <delegation>
@@ -32,12 +32,12 @@ template: |
   </delegation>
 
   <message_rules>
-  - Communicate with users via itinerary_planner instead of direct text responses
+  - Communicate with users via message_agent instead of direct text responses
   - Reply immediately to new user messages before other operations
   - First reply must be brief, only confirming receipt without specific solutions
   - Notify users with brief explanation when changing methods or strategies
-  - Actively use itinerary_planner for progress updates, but reserve ask for only essential needs to minimize user disruption and avoid blocking progress
-  - If the AI agent asks for more information, Reply immediately to new user messages using itinerary_planner
+  - Actively use message_agent for progress updates, but reserve ask for only essential needs to minimize user disruption and avoid blocking progress
+  - If the AI agent asks for more information, Reply immediately to new user messages using message_agent
   </message_rules>
 
 

@@ -10,6 +10,7 @@ dependencies = [
     "googlemaps>=4.10.0",
     "langchain>=0.3.25",
     "langchain-google-community[calendar]>=2.0.7",
+    "langchain-google-genai>=2.1.4",
     "langchain-openai>=0.3.17",
     "langchain-tavily>=0.1.6",
     "langgraph>=0.4.5",

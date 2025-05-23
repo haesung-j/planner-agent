@@ -7,4 +7,5 @@ class State(TypedDict):
     messages: Annotated[list, add_messages]
     next: Literal[*options_for_next]
     reason: str
-    # answer: str
+    places: list[str]
+    itinerary: str

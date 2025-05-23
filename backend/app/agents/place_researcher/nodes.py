@@ -66,6 +66,15 @@ class PlaceResponse(BaseNode):
             AIMessage,
             await chain.ainvoke([HumanMessage(content=state.messages[-2].content)]),
         )
-        response = places_to_readable_format(response.place_info)
-        response = AIMessage(content=response, name="place_researcher")
+
+        if hasattr(response, "place_info"):
+            response_formatted = places_to_readable_format(response.place_info)
+            response_formatted = AIMessage(
+                content=response_formatted, name="place_researcher"
+            )
+            return {
+                "messages": [response_formatted],
+                "places": response.place_info,
+            }
+
         return {"messages": [response]}

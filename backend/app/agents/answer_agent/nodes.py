@@ -33,7 +33,7 @@ class AnswerAgent(BaseNode):
                 continue
 
         if response:
-            response = AIMessage(content="".join(response), name="answer_agent")
+            response = AIMessage(content="".join(response), name="message_agent")
             return {"messages": [response]}
         else:
             return {"messages": [tool_calls]}

@@ -19,16 +19,16 @@ class Supervisor(BaseNode):
         chain = create_supervisor_chain(self.model_name)
         response = await chain.ainvoke(messages)
 
-        if response.next == "message_agent":
+        if response.next == "itinerary_planner":
             return {
                 "next": response.next,
-                "exaplain": response.exaplain,
+                "reason": response.reason,
             }
         else:
             writer = get_stream_writer()
-            writer(response.exaplain)
+            writer(response.notification)
             return {
                 "next": response.next,
-                "exaplain": response.exaplain,
-                "messages": AIMessage(content=response.exaplain, name="supervisor"),
+                "reason": response.reason,
+                "messages": AIMessage(content=response.notification, name="supervisor"),
             }
