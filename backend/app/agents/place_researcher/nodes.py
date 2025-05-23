@@ -1,5 +1,5 @@
 from typing import cast
-from langchain_core.messages import AIMessage
+from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.prebuilt import ToolNode
 
 from app.agents.place_researcher.tools import (
@@ -8,8 +8,12 @@ from app.agents.place_researcher.tools import (
     get_place_reviews,
 )
 from app.config import config
-from app.agents.place_researcher.chains import create_place_researcher_chain
+from app.agents.place_researcher.chains import (
+    create_place_researcher_chain,
+    create_place_researcher_response,
+)
 from app.agents.base import BaseNode
+from app.agents.utils import places_to_readable_format
 
 
 class PlaceResearcherAgent(BaseNode):
@@ -41,11 +45,24 @@ class PlaceResearcherAgent(BaseNode):
 class PlaceResearcherTools(ToolNode):
     def __init__(self, **kwargs):
         super().__init__(
-            tools=[
-                web_search,
-                search_place,
-                # get_place_reviews
-            ],
+            tools=[web_search, search_place, get_place_reviews],
             name="place_researcher_tools",
             **kwargs,
         )
+
+
+class PlaceResponse(BaseNode):
+    def __init__(self, name: str = "PlaceResponse", **kwargs):
+        super().__init__(name, **kwargs)
+        self.model_name = config.PLACE_RESPONSE_MODEL
+
+    async def arun(self, state):
+        chain = create_place_researcher_response(self.model_name)
+
+        response = cast(
+            AIMessage,
+            await chain.ainvoke([HumanMessage(content=state.messages[-2].content)]),
+        )
+        response = places_to_readable_format(response.place_info)
+        response = AIMessage(content=response)
+        return {"messages": [response]}
