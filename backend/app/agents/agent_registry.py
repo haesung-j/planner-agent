@@ -38,9 +38,10 @@ AGENTS_REGISTRY: Dict[str, AgentInfo] = {
             """,
         "enabled": True,
     },
-    "general_conversation": {
-        "description": "specialized agent to have a general conversation with the user",
-        "enabled": False,
+    "message_agent": {
+        # "description": "specialized agent to have a general conversation with the user",
+        "description": "specialized agent to have a conversation with the user",
+        "enabled": True,
     },
     "itinerary_planner": {
         "description": "specialized agent to create an itinerary plan. This agent is an agent that creates a itinerary based on a given set of places, so **it SHOULD ONLY be called when enough requirements have been collected from the other agents.**> ** DO NOT** invoke itinerary_planner directly if no prior search has occurred.",
@@ -55,12 +56,12 @@ def get_enabled_agents() -> List[str]:
 
 
 # 에이전트 이름에 대한 Literal 타입 생성
-options_for_next = get_enabled_agents() + ["FINISH"]
+options_for_next = get_enabled_agents()
 AgentName = Literal[tuple(options_for_next)]
 
 # for conditional edges
 options_for_next_dict = {agent: agent for agent in options_for_next}
-options_for_next_dict["FINISH"] = "answer_agent"
+# options_for_next_dict["FINISH"] = "answer_agent"
 
 
 # 프롬프트용 설명 문자열 생성

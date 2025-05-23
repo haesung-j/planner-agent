@@ -14,7 +14,7 @@ class RouteResponse(BaseModel):
     reason: Annotated[str, "reason for the decision"]
     next: Annotated[
         AgentName,
-        "next agent to route to. FINISH if the conversation should end.",
+        "next agent to route to. To get a response from the user, return the message_agent.",
     ]
     exaplain: Annotated[str, "Explain to the user what you're going to do"]
 
@@ -29,13 +29,13 @@ def create_supervisor_chain(model_name: str) -> RunnableSequence:
             (
                 "system",
                 "Given the conversation above, who should act next? "
-                "Or should we 'FINISH'? Select one of: {options}",
+                "Select one of: {options}",
             ),
         ]
     )
 
     supervisor_prompt = supervisor_prompt.partial(
-        options=str(options_for_next + ["FINISH"]),
+        options=str(options_for_next),
         agents_description=get_agents_description(),
     )
 

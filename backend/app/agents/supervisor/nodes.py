@@ -19,7 +19,7 @@ class Supervisor(BaseNode):
         chain = create_supervisor_chain(self.model_name)
         response = await chain.ainvoke(messages)
 
-        if response.next == "FINISH":
+        if response.next == "message_agent":
             return {
                 "next": response.next,
                 "exaplain": response.exaplain,
@@ -30,5 +30,5 @@ class Supervisor(BaseNode):
             return {
                 "next": response.next,
                 "exaplain": response.exaplain,
-                "messages": AIMessage(content=response.exaplain),
+                "messages": AIMessage(content=response.exaplain, name="supervisor"),
             }

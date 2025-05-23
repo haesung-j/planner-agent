@@ -24,7 +24,7 @@ class CalendarAgent(BaseNode):
             AIMessage,
             await chain.ainvoke(state.messages),
         )
-
+        response.name = "calendar_agent"
         # 마지막 단계인데도 모델이 도구를 사용하려는 경우
         if state.is_last_step and response.tool_calls:
             return {

@@ -36,9 +36,12 @@ class PlaceResearcherAgent(BaseNode):
                     AIMessage(
                         id=response.id,
                         content="죄송합니다. 질문에 대한 답변을 찾을 수 없습니다.",
+                        name="place_researcher",
                     )
                 ]
             }
+
+        response.name = "place_researcher"
         return {"messages": [response]}
 
 
@@ -64,5 +67,5 @@ class PlaceResponse(BaseNode):
             await chain.ainvoke([HumanMessage(content=state.messages[-2].content)]),
         )
         response = places_to_readable_format(response.place_info)
-        response = AIMessage(content=response)
+        response = AIMessage(content=response, name="place_researcher")
         return {"messages": [response]}

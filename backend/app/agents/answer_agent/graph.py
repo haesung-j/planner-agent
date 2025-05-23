@@ -12,5 +12,5 @@ def create_answer_agent():
     flow.add_edge("call_model", END)
 
     # Compile the builder into an executable graph
-    graph = flow.compile(name="answer_agent")
+    graph = flow.compile(name="message_agent")
     return graph

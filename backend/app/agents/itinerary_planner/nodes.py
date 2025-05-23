@@ -20,5 +20,5 @@ class ItineraryPlannerAgent(BaseNode):
             AIMessage,
             await chain.ainvoke(state.messages),
         )
-
+        response.name = "itinerary_planner"
         return {"messages": [response]}
