@@ -13,7 +13,29 @@ AGENTS_REGISTRY: Dict[str, AgentInfo] = {
         "enabled": True,
     },
     "calendar_agent": {
-        "description": "specialized agent to create/read/update/delete an event in Google Calendar. This agent can also process time-related information, such as the current date and time.",
+        "description": """
+            specialized agent to create/read/update/delete an event in Google Calendar. 
+            This agent can also process time-related information, such as the current date and time.
+            
+            ## STRICT CALENDAR TOOL USAGE RULES1. STRICT RULE: ONLY use calendar tools when the user EXPLICITLY makes a calendar-related query or request.
+
+            2. Allowed Request Types:
+                    - "What's my schedule tomorrow?"
+                    - "Add a meeting on October 15th"
+                    - "Show me my schedule for this week"
+                    - "Cancel my appointment next Tuesday"
+
+            3. Prohibited Scenarios:
+                    - Conversations where user doesn't mention calendar
+                    - Speculative calendar lookups for ambiguous questions
+                    - Unsolicited calendar checks in unrelated contexts
+
+            4. Guidelines for Uncertain Cases:
+                - First clarify the user's intention explicitly
+                - Request explicit permission: "Would you like me to check your calendar?"
+
+            NEVER violate these rules. Unauthorized calendar tool usage is considered a serious privacy violation.
+            """,
         "enabled": True,
     },
     "general_conversation": {

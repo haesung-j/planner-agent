@@ -29,5 +29,8 @@ def create_graph():
     flow.add_edge(answer_agent.name, END)
 
     memory = MemorySaver()
-    graph = flow.compile(checkpointer=memory)
+    graph = flow.compile(
+        checkpointer=memory,
+        # interrupt_before=[calendar_agent.name]
+    )
     return graph
