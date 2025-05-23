@@ -2,7 +2,7 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, load
 from langchain_openai import ChatOpenAI
 from langchain_core.runnables import RunnableSequence
 from pydantic import BaseModel
-from typing import Annotated
+from typing import Annotated, TypedDict
 from app.agents.agent_registry import (
     options_for_next,
     get_agents_description,
@@ -16,7 +16,7 @@ class RouteResponse(BaseModel):
         AgentName,
         "next agent to route to. FINISH if the conversation should end.",
     ]
-    answer: Annotated[str, "fianl answer to the user's question"]
+    exaplain: Annotated[str, "Explain to the user what you're going to do"]
 
 
 def create_supervisor_chain(model_name: str) -> RunnableSequence:

@@ -9,11 +9,11 @@ class AgentInfo(TypedDict):
 # 모든 에이전트 정의 및 설명
 AGENTS_REGISTRY: Dict[str, AgentInfo] = {
     "place_researcher": {
-        "description": "specialized agent to search for places and get more information about them",
+        "description": "specialized agent to search for places.",
         "enabled": True,
     },
     "calendar_agent": {
-        "description": "specialized agent to create/read/update/delete an event in Google Calendar",
+        "description": "specialized agent to create/read/update/delete an event in Google Calendar. This agent can also process time-related information, such as the current date and time.",
         "enabled": True,
     },
     "general_conversation": {

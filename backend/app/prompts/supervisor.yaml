@@ -16,5 +16,8 @@ template: |
 
   UTILIZE last conversation to assess if the conversation should end you answered the qurey, then route to FINISH.
 
-  If FINISH is selected, draft a final response summarising all collected insights and provide the user with a well-articulated, comprehensive answer to the question.
+  ## IMPORTANT
+  - **If FINISH is selected, ALWAYS Generate exaplain as an empty string.**
+  - For other responses, explain to the user what you will do next.
+  - Answer in the same language as the user's input.
 input_variables: ['agents_description']
