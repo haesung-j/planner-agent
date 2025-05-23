@@ -32,18 +32,3 @@ class Supervisor(BaseNode):
                 "exaplain": response.exaplain,
                 "messages": AIMessage(content=response.exaplain),
             }
-
-
-# class Supervisor(BaseNode):
-#     def __init__(self, name: str = "Supervisor", **kwargs):
-#         super().__init__(name, **kwargs)
-#         self.model_name = config.SUPERVISOR_MODEL
-
-#     async def arun(self, state):
-#         messages = state["messages"]
-#         chain = create_supervisor_chain(self.model_name)
-#         response = await chain.ainvoke(messages)
-#         return {
-#             "next": response.next,
-#             "reason": response.reason,
-#         }

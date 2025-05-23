@@ -38,7 +38,7 @@ AgentName = Literal[tuple(options_for_next)]
 
 # for conditional edges
 options_for_next_dict = {agent: agent for agent in options_for_next}
-options_for_next_dict["FINISH"] = "answer"
+options_for_next_dict["FINISH"] = "answer_agent"
 
 
 # 프롬프트용 설명 문자열 생성
