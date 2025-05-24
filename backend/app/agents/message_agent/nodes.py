@@ -3,17 +3,17 @@ from langchain_core.messages import AIMessage
 from langgraph.config import get_stream_writer
 
 from app.config import config
-from app.agents.answer_agent.chains import create_answer_chain
+from app.agents.message_agent.chains import create_message_chain
 from app.agents.base import BaseNode
 
 
-class AnswerAgent(BaseNode):
-    def __init__(self, name: str = "AnswerAgent", **kwargs):
+class MessageAgent(BaseNode):
+    def __init__(self, name: str = "MessageAgent", **kwargs):
         super().__init__(name, **kwargs)
         self.model_name = config.GENERAL_CONVERSATION_MODEL
 
     async def arun(self, state):
-        chain = create_answer_chain(self.model_name)
+        chain = create_message_chain(self.model_name)
 
         writer = get_stream_writer()
 
