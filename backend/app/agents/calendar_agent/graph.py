@@ -6,9 +6,9 @@ from app.agents.calendar_agent.edges import route_output
 from app.agents.calendar_agent.state import AgentState
 
 
-def create_calendar_agent():
+def create_calendar_agent(verbose=True):
     flow = StateGraph(AgentState)
-    flow.add_node("call_model", CalendarAgent())
+    flow.add_node("call_model", CalendarAgent(verbose=verbose))
     flow.add_node("tools", CalendarTools())
 
     flow.add_edge(START, "call_model")

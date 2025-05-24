@@ -12,11 +12,11 @@ from app.agents.place_researcher.state import AgentState
 from langgraph.checkpoint.memory import MemorySaver
 
 
-def create_place_researcher_agent():
+def create_place_researcher_agent(verbose=True):
     flow = StateGraph(AgentState)
-    flow.add_node("call_model", PlaceResearcherAgent())
+    flow.add_node("call_model", PlaceResearcherAgent(verbose=verbose))
     flow.add_node("tools", PlaceResearcherTools())
-    flow.add_node("respond", PlaceResponse())
+    flow.add_node("respond", PlaceResponse(verbose=verbose))
 
     flow.add_edge(START, "call_model")
     # Add a conditional edge to determine the next step after `call_model`

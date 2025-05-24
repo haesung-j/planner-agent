@@ -12,11 +12,11 @@ from app.agents.calendar_agent.graph import create_calendar_agent
 from app.agents.itinerary_planner.graph import create_itinerary_planner_agent
 
 
-def create_graph():
+def create_graph(verbose=True):
     # answer_agent = create_answer_agent()
-    place_researcher_agent = create_place_researcher_agent()
-    calendar_agent = create_calendar_agent()
-    itinerary_planner_agent = create_itinerary_planner_agent()
+    place_researcher_agent = create_place_researcher_agent(verbose=verbose)
+    calendar_agent = create_calendar_agent(verbose=verbose)
+    itinerary_planner_agent = create_itinerary_planner_agent(verbose=verbose)
     flow = StateGraph(State)
     flow.add_node("supervisor", Supervisor())
     # flow.add_node(answer_agent.name, answer_agent)

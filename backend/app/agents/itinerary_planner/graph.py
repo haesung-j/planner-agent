@@ -11,10 +11,10 @@ from app.agents.itinerary_planner.edges import get_state
 from langgraph.checkpoint.memory import MemorySaver
 
 
-def create_itinerary_planner_agent():
+def create_itinerary_planner_agent(verbose=True):
     flow = StateGraph(AgentState)
-    flow.add_node("gather_info", ItineraryInformationGatherer())
-    flow.add_node("generate_itinerary", ItineraryPlannerAgent())
+    flow.add_node("gather_info", ItineraryInformationGatherer(verbose=verbose))
+    flow.add_node("generate_itinerary", ItineraryPlannerAgent(verbose=verbose))
     flow.add_node("add_tool_message", add_tool_message)
 
     flow.add_edge(START, "gather_info")
