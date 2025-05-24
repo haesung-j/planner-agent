@@ -49,7 +49,7 @@ class PlaceResearcherTools(ToolNode):
     def __init__(self, **kwargs):
         super().__init__(
             tools=[
-                web_search,
+                # web_search,
                 search_place,
                 # get_place_reviews
             ],

@@ -14,13 +14,13 @@ from app.agents.share_agent.graph import create_share_agent
 
 
 def create_graph(verbose=True):
-    message_agent = create_message_agent()
+    message_agent = create_message_agent(verbose=verbose)
     place_researcher_agent = create_place_researcher_agent(verbose=verbose)
     calendar_agent = create_calendar_agent(verbose=verbose)
     itinerary_planner_agent = create_itinerary_planner_agent(verbose=verbose)
     share_agent = create_share_agent(verbose=verbose)
     flow = StateGraph(State)
-    flow.add_node("supervisor", Supervisor())
+    flow.add_node("supervisor", Supervisor(verbose=verbose))
     flow.add_node(message_agent.name, message_agent)
     flow.add_node(place_researcher_agent.name, place_researcher_agent)
     flow.add_node(calendar_agent.name, calendar_agent)

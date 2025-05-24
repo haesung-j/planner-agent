@@ -182,11 +182,25 @@ def main():
                                 ):
                                     response += chunk
                                     message_placeholder.markdown(response)
-
-                                st.session_state.messages.append(
-                                    {"role": "assistant", "content": response}
+                                # resume이 완료된 후 다시 상태 확인
+                                state_data = api_client.get_graph_state(
+                                    st.session_state.thread_id
                                 )
-                                st.session_state.human_in_the_loop = False
+
+                                if state_data["has_tasks"]:
+                                    # 여전히 task가 있다면 다시 human_in_the_loop로 설정
+                                    st.session_state.human_in_the_loop = True
+                                    st.rerun()  # 페이지 재실행으로 다시 처리
+                                else:
+                                    # 정상 완료된 경우에만 메시지 추가
+                                    st.session_state.messages.append(
+                                        {"role": "assistant", "content": response}
+                                    )
+                                    st.session_state.human_in_the_loop = False
+                                # st.session_state.messages.append(
+                                #     {"role": "assistant", "content": response}
+                                # )
+                                # st.session_state.human_in_the_loop = False
 
                             asyncio.run(resume_execution())
 
@@ -204,12 +218,26 @@ def main():
                         ):
                             response += chunk
                             message_placeholder.markdown(response)
-
-                        st.session_state.messages.append(
-                            {"role": "assistant", "content": response}
+                        # resume이 완료된 후 다시 상태 확인
+                        state_data = api_client.get_graph_state(
+                            st.session_state.thread_id
                         )
-                        st.session_state.human_in_the_loop = False
-                        st.rerun()
+
+                        if state_data["has_tasks"]:
+                            # 여전히 task가 있다면 다시 human_in_the_loop로 설정
+                            st.session_state.human_in_the_loop = True
+                            st.rerun()  # 페이지 재실행으로 다시 처리
+                        else:
+                            # 정상 완료된 경우에만 메시지 추가
+                            st.session_state.messages.append(
+                                {"role": "assistant", "content": response}
+                            )
+                            st.session_state.human_in_the_loop = False
+                        # st.session_state.messages.append(
+                        #     {"role": "assistant", "content": response}
+                        # )
+                        # st.session_state.human_in_the_loop = False
+                        # st.rerun()
 
                     asyncio.run(resume_execution())
 

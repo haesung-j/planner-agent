@@ -14,7 +14,7 @@ def route_output(state) -> Literal["__end__", "tools"]:
     Returns:
         str: The name of the next node to call ("__end__" or "tools").
     """
-    last_message = state.messages[-1]
+    last_message = state.get("messages", [])[-1]
     if not isinstance(last_message, AIMessage):
         raise ValueError(
             f"Expected AIMessage in output edges, but got {type(last_message).__name__}"

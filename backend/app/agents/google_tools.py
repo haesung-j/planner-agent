@@ -16,7 +16,7 @@ api_resource = build_resource_service(credentials=credentials)
 
 gmail_toolkit = GmailToolkit(api_resource=api_resource)
 
-gmail_tools = gmail_toolkit.get_tools()
+gmail_tools = gmail_toolkit.get_tools()[1:]  # 초안 작성 제거
 
 
 calendar_toolkit = CalendarToolkit(credentials_path="credentials.json")

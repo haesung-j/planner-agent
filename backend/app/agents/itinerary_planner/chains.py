@@ -10,12 +10,13 @@ from app.config import config
 class ItineraryInformation(BaseModel):
     """Information about the itinerary."""
 
-    places: str = Field(description="Places to visit")
-    dates: str = Field(description="Dates to visit")
-    days: int = Field(description="Number of days to stay")
-    check_calendar: bool = Field(
-        description="Check for empty spaces in the user-selected calendar"
+    places: List[str] = Field(
+        description="Which places does the user want to visit. A minimum of five locations is required.",
+        min_length=5,
     )
+    departure: str = Field(description="When does the user want to leave")
+    durations: int = Field(description="How many days will the user be traveling")
+    companions: bool = Field(description="Who will be joining the user on this trip")
 
 
 def create_itinerary_info_gather_chain(

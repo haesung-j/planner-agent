@@ -14,15 +14,15 @@ class ShareAgent(BaseNode):
         self.model_name = config.SHARE_AGENT_MODEL
 
     async def arun(self, state):
-        chain = create_share_chain(self.model_name, state.itinerary)
+        chain = create_share_chain(self.model_name, state.get("itinerary", ""))
 
         response = cast(
             AIMessage,
-            await chain.ainvoke(state.messages),
+            await chain.ainvoke(state.get("messages", [])),
         )
         response.name = "share_agent"
         # 마지막 단계인데도 모델이 도구를 사용하려는 경우
-        if state.is_last_step and response.tool_calls:
+        if state.get("is_last_step", False) and response.tool_calls:
             return {
                 "messages": [
                     AIMessage(

@@ -7,13 +7,12 @@ template: |
 
   <search_rules>
   - Always search with one search term at a time.
-  - use `web_search` to search for general web results. 
   </search_rules>
   
   <caution>
-  - **Today's date is {current_date} and the current time is {current_time}.**
-  - If the user didn't mention a specific place, use web_search to narrow down the candidates first. Then use `search_place` to specify a specific place for your shortlisted candidates.
-  - Use the tools you've been given to find the right places to engage your users.
+  - **Today's date is {current_date} and the current time is {current_time}.**.
+  - To search for places, be sure to use the search_place tool. 
+  - Don't answer without searching.
   </caution>
 
 input_variables: ['current_date', 'current_time']

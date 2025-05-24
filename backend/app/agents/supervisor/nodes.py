@@ -25,8 +25,8 @@ class Supervisor(BaseNode):
                 "reason": response.reason,
             }
         else:
-            writer = get_stream_writer()
-            writer(response.notification)
+            # writer = get_stream_writer()
+            # writer(response.notification)
             return {
                 "next": response.next,
                 "reason": response.reason,

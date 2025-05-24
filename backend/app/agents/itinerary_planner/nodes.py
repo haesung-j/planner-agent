@@ -1,6 +1,8 @@
+from typing import cast
 from langchain_core.messages import AIMessage, ToolMessage
 from langgraph.prebuilt import ToolNode
-from langgraph.config import get_stream_writer
+
+# from langgraph.config import get_stream_writer
 
 from app.config import config
 from app.agents.itinerary_planner.chains import (
@@ -16,33 +18,49 @@ class ItineraryInformationGatherer(BaseNode):
         self.model_name = config.ITINERARY_PLANNER_MODEL
 
     async def arun(self, state):
-        writer = get_stream_writer()
+        # writer = get_stream_writer()
 
         places = state.get("places", "")
         chain = create_itinerary_info_gather_chain(self.model_name, places)
         messages = state["messages"]
-        response = []
-        tool_calls = None
+        # response = []
+        # tool_calls = None
 
-        first = True
-        async for chunk in chain.astream({"messages": messages}):
-            if chunk.tool_call_chunks:
-                if first:
-                    tool_calls = chunk
-                    first = False
-                else:
-                    tool_calls += chunk
-            elif chunk.content:
-                response.append(chunk.content)
-                writer(chunk.content)
-            else:
-                continue
+        # first = True
+        # async for chunk in chain.astream({"messages": messages}):
+        #     if chunk.tool_call_chunks:
+        #         if first:
+        #             tool_calls = chunk
+        #             first = False
+        #         else:
+        #             tool_calls += chunk
+        #     elif chunk.content:
+        #         response.append(chunk.content)
+        #         writer(chunk.content)
+        #     else:
+        #         continue
 
-        if response:
-            response = AIMessage(content="".join(response), name="itinerary_planner")
-            return {"messages": [response]}
-        else:
-            return {"messages": [tool_calls]}
+        # if response:
+        #     response = AIMessage(content="".join(response), name="itinerary_planner")
+        #     return {"messages": [response]}
+        # else:
+        #     return {"messages": [tool_calls]}
+        response = cast(
+            AIMessage,
+            await chain.ainvoke(messages),
+        )
+        response.name = "itinerary_planner"
+        # 마지막 단계인데도 모델이 도구를 사용하려는 경우
+        if state["is_last_step"] and response.tool_calls:
+            return {
+                "messages": [
+                    AIMessage(
+                        id=response.id,
+                        content="죄송합니다. 질문에 대한 답변을 찾을 수 없습니다.",
+                    )
+                ]
+            }
+        return {"messages": [response]}
 
 
 def add_tool_message(state):

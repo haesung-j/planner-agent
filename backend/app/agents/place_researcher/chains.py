@@ -43,7 +43,7 @@ def create_place_researcher_chain(model_name: str) -> RunnableSequence:
     else:
         model = ChatOpenAI(model=model_name, temperature=0.2)
     tools = [
-        web_search,
+        # web_search,
         search_place,
         # get_place_reviews
     ]

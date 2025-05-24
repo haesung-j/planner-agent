@@ -1,5 +1,6 @@
 from typing import Annotated, Sequence
 from typing import TypedDict
+from pydantic import Field
 from langchain_core.messages import AnyMessage
 from langgraph.graph.message import add_messages
 from langgraph.managed import IsLastStep
@@ -7,4 +8,5 @@ from langgraph.managed import IsLastStep
 
 class AgentState(TypedDict):
     messages: Annotated[Sequence[AnyMessage], add_messages]
+    is_last_step: IsLastStep = Field(default=False)
     itinerary: str

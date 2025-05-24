@@ -20,9 +20,11 @@ def create_share_chain(model_name: str, travel_itinerary: str) -> RunnableSequen
             MessagesPlaceholder("messages"),
             (
                 "system",
-                """You must share your travel itinerary below. If not given below, ask the user to create a travel itinerary first.""",
+                """You must share your travel itinerary below. If not given below, ask the user to create a travel itinerary first.
+                
+                {travel_itinerary}
+                """,
             ),
-            MessagesPlaceholder("travel_itinerary"),
         ]
     )
 

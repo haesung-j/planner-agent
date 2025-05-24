@@ -3,9 +3,10 @@ from langgraph.graph import StateGraph, START
 from app.agents.share_agent.nodes import ShareAgent, ShareTools
 from app.agents.share_agent.edges import route_output
 from app.agents.share_agent.state import AgentState
+from langgraph.checkpoint.memory import MemorySaver
 
 
-def create_share_agent(verbose=True):
+def create_share_agent(verbose=True, **kwargs):
     flow = StateGraph(AgentState)
     flow.add_node("call_model", ShareAgent(verbose=verbose))
     flow.add_node("tools", ShareTools())
@@ -24,5 +25,10 @@ def create_share_agent(verbose=True):
     flow.add_edge("tools", "call_model")
 
     # Compile the builder into an executable graph
+    memory = kwargs.get("memory", False)
+    if memory:
+        graph = flow.compile(name="share_agent", checkpointer=MemorySaver())
+        return graph
+
     graph = flow.compile(name="share_agent")
     return graph
