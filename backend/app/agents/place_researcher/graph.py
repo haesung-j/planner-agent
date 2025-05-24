@@ -34,5 +34,8 @@ def create_place_researcher_agent(verbose=True):
 
     # memory = MemorySaver()
     # Compile the builder into an executable graph
-    graph = flow.compile(name="place_researcher")
+    graph = flow.compile(
+        name="place_researcher",
+        interrupt_after=["tools"],
+    )
     return graph

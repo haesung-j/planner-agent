@@ -19,9 +19,9 @@ class PlaceInfo(BaseModel):
     latitude: float = Field(description="The latitude of the place")
     longitude: float = Field(description="The longitude of the place")
     rating: float = Field(description="The rating of the place", ge=0, le=5)
-    reviews: Optional[list[str]] = Field(
-        description="The reviews of the place. If you can't find any reviews, return an empty list."
-    )
+    # reviews: Optional[list[str]] = Field(
+    #     description="The reviews of the place. If you can't find any reviews, return an empty list."
+    # )
     place_id: str = Field(description="The place_id of the place")
     reason: str = Field(
         description="Explain why this place is the best fit for the user's question compared to other places."
@@ -42,11 +42,15 @@ def create_place_researcher_chain(model_name: str) -> RunnableSequence:
         model = ChatGoogleGenerativeAI(model=model_name, temperature=0.1)
     else:
         model = ChatOpenAI(model=model_name, temperature=0.2)
-    tools = [web_search, search_place, get_place_reviews]
+    tools = [
+        web_search,
+        search_place,
+        # get_place_reviews
+    ]
 
     prompt = load_prompt("app/prompts/place_researcher.yaml").template
 
-    model_with_tools = model.bind_tools(tools)
+    model_with_tools = model.bind_tools(tools, parallel_tool_calls=False)
 
     prompt = ChatPromptTemplate.from_messages(
         [

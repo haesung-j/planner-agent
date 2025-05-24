@@ -13,6 +13,9 @@ class ItineraryInformation(BaseModel):
     places: str = Field(description="Places to visit")
     dates: str = Field(description="Dates to visit")
     days: int = Field(description="Number of days to stay")
+    check_calendar: bool = Field(
+        description="Check for empty spaces in the user-selected calendar"
+    )
 
 
 def create_itinerary_info_gather_chain(

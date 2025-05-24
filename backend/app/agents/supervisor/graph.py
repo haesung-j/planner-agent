@@ -32,9 +32,9 @@ def create_graph(verbose=True):
     flow.add_edge(message_agent.name, END)
     # flow.add_edge(itinerary_planner_agent.name, END)
 
-    memory = MemorySaver()
-    graph = flow.compile(
-        checkpointer=memory,
-        # interrupt_before=[calendar_agent.name]
-    )
-    return graph
+    # memory = MemorySaver()
+    # graph = flow.compile(
+    #     checkpointer=memory,
+    #     # interrupt_before=[calendar_agent.name]
+    # )
+    return flow

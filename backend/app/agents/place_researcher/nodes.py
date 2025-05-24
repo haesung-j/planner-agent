@@ -48,7 +48,11 @@ class PlaceResearcherAgent(BaseNode):
 class PlaceResearcherTools(ToolNode):
     def __init__(self, **kwargs):
         super().__init__(
-            tools=[web_search, search_place, get_place_reviews],
+            tools=[
+                web_search,
+                search_place,
+                # get_place_reviews
+            ],
             name="place_researcher_tools",
             **kwargs,
         )
@@ -67,7 +71,7 @@ class PlaceResponse(BaseNode):
             await chain.ainvoke([HumanMessage(content=state.messages[-2].content)]),
         )
 
-        if hasattr(response, "place_info"):
+        if hasattr(response, "place_info") and response.place_info is not None:
             response_formatted = places_to_readable_format(response.place_info)
             response_formatted = AIMessage(
                 content=response_formatted, name="place_researcher"
@@ -77,4 +81,9 @@ class PlaceResponse(BaseNode):
                 "places": response.place_info,
             }
 
-        return {"messages": [response]}
+        # response.place_info is None
+        response_formatted = AIMessage(
+            content="죄송합니다. 질문에 대한 답변을 찾을 수 없습니다.",
+            name="place_researcher",
+        )
+        return {"messages": [response_formatted]}

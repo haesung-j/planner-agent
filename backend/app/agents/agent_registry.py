@@ -9,7 +9,7 @@ class AgentInfo(TypedDict):
 # 모든 에이전트 정의 및 설명
 AGENTS_REGISTRY: Dict[str, AgentInfo] = {
     "place_researcher": {
-        "description": "specialized agent to search for places.",
+        "description": "specialized agent to search for places. If you need to search the web or find a place, you MUST do so through this agent.",
         "enabled": True,
     },
     "calendar_agent": {
@@ -40,11 +40,11 @@ AGENTS_REGISTRY: Dict[str, AgentInfo] = {
     },
     "message_agent": {
         # "description": "specialized agent to have a general conversation with the user",
-        "description": "specialized agent to have a conversation with the user. You only communicate with users through this agent.",
+        "description": "specialized agent to have a conversation with the user. You ONLY communicate with users through this agent.",
         "enabled": True,
     },
     "itinerary_planner": {
-        "description": "specialized agent to create an itinerary plan. This agent is an agent that creates a itinerary based on a given set of places, so **it SHOULD ONLY be called when enough requirements have been collected from the other agents.**> ** DO NOT** invoke itinerary_planner directly if no prior search has occurred.",
+        "description": "specialized agent to create an itinerary plan. This agent is an agent that creates a itinerary based on a given set of places, so **it SHOULD ONLY be called when enough requirements have been collected from the other agents.**. ** DO NOT** invoke itinerary_planner directly if no prior search has occurred.",
         "enabled": True,
     },
 }

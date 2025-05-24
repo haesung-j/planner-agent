@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: ./backend/Dockerfile
-    ports:
-      - "8000:8000" # LangGraph API 서버 포트
+    # ports:
+    #   - "8000:8000" # LangGraph API 서버 포트
     environment:
       - LANGFUSE_HOST=http://langfuse:3000
       # - LANGFUSE_PUBLIC_KEY=${LANGFUSE_PUBLIC_KEY} # .env 파일 등에서 관리
@@ -18,30 +18,30 @@ services:
     networks:
       - app-network
 
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "8501:8501" # Streamlit 기본 포트
-  #   volumes:
-  #     - ./frontend:/app
-  #   environment:
-  #     # 백엔드 API 주소 설정
-  #     - BACKEND_API_URL=http://backend:8000 
-  #   depends_on:
-  #     - backend
-  #   networks:
-  #     - app-network
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    # ports:
+    #   - "8501:8501" # Streamlit 기본 포트
+    environment:
+      # 백엔드 API 주소 설정
+      - BACKEND_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    networks:
+      - app-network
 
   nginx:
     build: ./nginx
     ports:
       - "80:80" # 외부 접속 포트
     depends_on:
-      - backend
+      - frontend
     networks:
       - app-network
     healthcheck:
-      test: curl -f http://localhost:8000/docs
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://backend:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
