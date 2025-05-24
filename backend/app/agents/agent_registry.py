@@ -44,7 +44,11 @@ AGENTS_REGISTRY: Dict[str, AgentInfo] = {
         "enabled": True,
     },
     "itinerary_planner": {
-        "description": "specialized agent to create an itinerary plan. This agent is an agent that creates a itinerary based on a given set of places, so **it SHOULD ONLY be called when enough requirements have been collected from the other agents.**. ** DO NOT** invoke itinerary_planner directly if no prior search has occurred.",
+        "description": "specialized agent to create an itinerary plan. This agent is an agent that creates a itinerary based on a given set of places, so **it SHOULD ONLY be called when enough requirements have been collected from the other agents.**. **DO NOT** invoke itinerary_planner directly if no prior place_researcher has occurred.",
+        "enabled": True,
+    },
+    "share_agent": {
+        "description": "specialized agent to share the travel itinerary externally. This agent is an agent that shares the travel itinerary, so **it SHOULD ONLY be called when enough requirements have been collected from the other agents.**. **DO NOT** invoke share_agent directly if no prior itinerary_planner has occurred.",
         "enabled": True,
     },
 }

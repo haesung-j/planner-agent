@@ -1,30 +1,26 @@
 from typing import cast
 from langchain_core.messages import AIMessage
 from langgraph.prebuilt import ToolNode
-from datetime import datetime
 
-from app.agents.google_tools import calendar_tools
+from app.agents.google_tools import gmail_tools
 from app.config import config
-from app.agents.calendar_agent.chains import create_calendar_chain
+from app.agents.share_agent.chains import create_share_chain
 from app.agents.base import BaseNode
 
 
-class CalendarAgent(BaseNode):
-    def __init__(self, name: str = "CalendarAgent", **kwargs):
+class ShareAgent(BaseNode):
+    def __init__(self, name: str = "ShareAgent", **kwargs):
         super().__init__(name, **kwargs)
-        self.model_name = config.CALENDAR_AGENT_MODEL
+        self.model_name = config.SHARE_AGENT_MODEL
 
     async def arun(self, state):
-        current_date = datetime.now().strftime("%Y-%m-%d")
-        current_time = datetime.now().strftime("%H:%M:%S")
-
-        chain = create_calendar_chain(self.model_name, current_date, current_time)
+        chain = create_share_chain(self.model_name, state.itinerary)
 
         response = cast(
             AIMessage,
             await chain.ainvoke(state.messages),
         )
-        response.name = "calendar_agent"
+        response.name = "share_agent"
         # 마지막 단계인데도 모델이 도구를 사용하려는 경우
         if state.is_last_step and response.tool_calls:
             return {
@@ -38,6 +34,6 @@ class CalendarAgent(BaseNode):
         return {"messages": [response]}
 
 
-class CalendarTools(ToolNode):
+class ShareTools(ToolNode):
     def __init__(self, **kwargs):
-        super().__init__(tools=calendar_tools, name="calendar_tools", **kwargs)
+        super().__init__(tools=gmail_tools, name="share_tools", **kwargs)

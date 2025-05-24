@@ -27,7 +27,7 @@ import os
 # print(f"PostgreSQL 연결 실패, 메모리 저장소 사용: {e}")
 checkpointer = MemorySaver()
 # store = InMemoryStore()
-graph = create_graph()
+graph = create_graph(verbose=True)
 graph = graph.compile(checkpointer=checkpointer)
 
 

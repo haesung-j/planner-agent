@@ -1,14 +1,14 @@
 from langgraph.graph import StateGraph, START
 
-from app.agents.calendar_agent.nodes import CalendarAgent, CalendarTools
-from app.agents.calendar_agent.edges import route_output
-from app.agents.calendar_agent.state import AgentState
+from app.agents.share_agent.nodes import ShareAgent, ShareTools
+from app.agents.share_agent.edges import route_output
+from app.agents.share_agent.state import AgentState
 
 
-def create_calendar_agent(verbose=True):
+def create_share_agent(verbose=True):
     flow = StateGraph(AgentState)
-    flow.add_node("call_model", CalendarAgent(verbose=verbose))
-    flow.add_node("tools", CalendarTools())
+    flow.add_node("call_model", ShareAgent(verbose=verbose))
+    flow.add_node("tools", ShareTools())
 
     flow.add_edge(START, "call_model")
     # Add a conditional edge to determine the next step after `call_model`
@@ -24,5 +24,5 @@ def create_calendar_agent(verbose=True):
     flow.add_edge("tools", "call_model")
 
     # Compile the builder into an executable graph
-    graph = flow.compile(name="calendar_agent")
+    graph = flow.compile(name="share_agent")
     return graph
