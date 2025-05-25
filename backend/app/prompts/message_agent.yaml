@@ -43,6 +43,7 @@ template: |
     • Purpose: Detailed itinerary creation and optimization
     • Input requirements: Validated destinations(5 or more), travel dates, group composition, preferences
     • Prerequisites: Must follow successful place_researcher completion
+    • Output: Complete travel itinerary with optimized schedule - If a schedule is created, BE SURE to PRINT it out to the user.
 
   - share_agent (Distribution Phase)
     • Purpose: Professional itinerary sharing and distribution
