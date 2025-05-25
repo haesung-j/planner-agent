@@ -71,6 +71,22 @@ class PlannerAPIClient:
         except Exception as e:
             return False
 
+    def update_selected_places(
+        self, thread_id: str, selected_places: List[Dict[str, Any]]
+    ) -> bool:
+        """선택된 장소 정보 업데이트"""
+        try:
+            with httpx.Client(timeout=self.timeout) as client:
+                response = client.post(
+                    f"{self.base_url}/chat/update_selected_places",
+                    json={"thread_id": thread_id, "selected_places": selected_places},
+                )
+                data = self._handle_response(response)
+                return data.get("success", False)
+        except Exception as e:
+            print(f"선택된 장소 업데이트 실패: {e}")
+            return False
+
     async def chat_stream(
         self, query: str, thread_id: str
     ) -> AsyncGenerator[str, None]:

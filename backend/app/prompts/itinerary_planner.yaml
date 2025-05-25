@@ -21,6 +21,26 @@ template: |
   - **Today's date is {current_date} and the current time is {current_time}.**
   </remember>
 
+  <places_user_has_selected>
+  CRITICAL: You MUST ONLY use the places listed below to determine how many places the user has selected. DO NOT refer to any conversation history or previous messages to count places.
+  
+  If the list below contains fewer than 5 places, you MUST ask the user to search for and select more places before creating any itinerary.
+  
+  Here are the ONLY places you should consider as selected:
+  {selected_places}
+  </places_user_has_selected>
+
+  <strict_place_counting_rules>
+  ABSOLUTELY CRITICAL INSTRUCTIONS FOR ITINERARY CREATION:
+  - You MUST count ONLY the places provided in the <places_user_has_selected> above
+  - DO NOT count places mentioned in conversation history
+  - DO NOT count places mentioned in previous messages
+  - DO NOT make assumptions about places the user might have selected
+  - If <places_user_has_selected> contains fewer than 5 items, REFUSE to create an itinerary and ask the user to select more places
+  - IGNORE any place references outside of the <places_user_has_selected>
+  - ONLY create itineraries using the places explicitly listed in <places_user_has_selected>
+  </strict_place_counting_rules>
+
   <itinerary_format>
   Overall, all schedules should include time.
   - Day-by-day breakdown of activities
@@ -37,4 +57,4 @@ template: |
   - Use link to format the itinerary.
   </output_format>
 
-input_variables: ['current_date', 'current_time', 'places']
+input_variables: ['current_date', 'current_time', 'selected_places']

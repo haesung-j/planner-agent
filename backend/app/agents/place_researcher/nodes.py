@@ -71,7 +71,7 @@ class PlaceResponse(BaseNode):
             await chain.ainvoke([HumanMessage(content=state.messages[-2].content)]),
         )
 
-        if hasattr(response, "place_info") and response.place_info is not None:
+        if hasattr(response, "place_info") and response.place_info:
             response_formatted = places_to_readable_format(response.place_info)
             response_formatted = AIMessage(
                 content=response_formatted, name="place_researcher"

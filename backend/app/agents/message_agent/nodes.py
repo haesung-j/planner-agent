@@ -13,13 +13,14 @@ class MessageAgent(BaseNode):
         self.model_name = config.GENERAL_CONVERSATION_MODEL
 
     async def arun(self, state):
+        messages = state["messages"]
         chain = create_message_chain(self.model_name)
 
         writer = get_stream_writer()
 
         first = True
         response = []
-        async for chunk in chain.astream(state["messages"]):
+        async for chunk in chain.astream(messages):
             if chunk.tool_call_chunks:
                 if first:
                     tool_calls = chunk

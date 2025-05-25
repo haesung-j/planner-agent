@@ -10,6 +10,7 @@ from app.agents.itinerary_planner.chains import (
     create_itinerary_planner_chain,
 )
 from app.agents.base import BaseNode
+from app.agents.utils import format_places_to_string
 
 
 class ItineraryInformationGatherer(BaseNode):
@@ -18,33 +19,13 @@ class ItineraryInformationGatherer(BaseNode):
         self.model_name = config.ITINERARY_PLANNER_MODEL
 
     async def arun(self, state):
-        # writer = get_stream_writer()
-
-        places = state.get("places", "")
-        chain = create_itinerary_info_gather_chain(self.model_name, places)
+        selected_places = state.get("selected_places", [])
+        chain = create_itinerary_info_gather_chain(
+            self.model_name, format_places_to_string(selected_places)
+        )
+        print("!" * 100)
+        print(format_places_to_string(selected_places))
         messages = state["messages"]
-        # response = []
-        # tool_calls = None
-
-        # first = True
-        # async for chunk in chain.astream({"messages": messages}):
-        #     if chunk.tool_call_chunks:
-        #         if first:
-        #             tool_calls = chunk
-        #             first = False
-        #         else:
-        #             tool_calls += chunk
-        #     elif chunk.content:
-        #         response.append(chunk.content)
-        #         writer(chunk.content)
-        #     else:
-        #         continue
-
-        # if response:
-        #     response = AIMessage(content="".join(response), name="itinerary_planner")
-        #     return {"messages": [response]}
-        # else:
-        #     return {"messages": [tool_calls]}
         response = cast(
             AIMessage,
             await chain.ainvoke(messages),
@@ -80,6 +61,10 @@ class ItineraryPlannerAgent(BaseNode):
         self.model_name = config.ITINERARY_PLANNER_MODEL
 
     async def arun(self, state):
-        chain = create_itinerary_planner_chain(self.model_name)
-        response = await chain.ainvoke(state["messages"])
+        selected_places = state.get("selected_places", [])
+        chain = create_itinerary_planner_chain(
+            self.model_name, format_places_to_string(selected_places)
+        )
+        messages = state["messages"]
+        response = await chain.ainvoke(messages)
         return {"messages": [response], "itinerary": response.content}

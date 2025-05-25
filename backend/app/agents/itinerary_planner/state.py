@@ -1,3 +1,4 @@
+import operator
 from typing import Annotated, Sequence
 from typing import TypedDict
 from pydantic import Field
@@ -10,3 +11,4 @@ class AgentState(TypedDict):
     messages: Annotated[Sequence[AnyMessage], add_messages]
     is_last_step: IsLastStep = Field(default=False)
     itinerary: str
+    selected_places: list

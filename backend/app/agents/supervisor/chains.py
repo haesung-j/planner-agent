@@ -47,6 +47,8 @@ def create_supervisor_chain(model_name: str) -> RunnableSequence:
         model = ChatOpenAI(model=model_name, temperature=1.0)
     elif model_name == "gemini-1.5-flash":
         model = ChatGoogleGenerativeAI(model=model_name, temperature=0.1)
+    elif model_name == "gpt-4.1-mini":
+        model = ChatOpenAI(model=model_name, temperature=0.1)
     else:
         model = ChatOpenAI(model=model_name, temperature=0.1)
 

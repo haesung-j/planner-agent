@@ -11,3 +11,4 @@ class State(TypedDict):
     places: list[str]
     itinerary: str
     safety_check: GuardrailOutput
+    selected_places: list

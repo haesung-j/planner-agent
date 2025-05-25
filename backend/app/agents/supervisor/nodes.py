@@ -5,9 +5,6 @@ from app.agents.base import BaseNode
 from app.agents.supervisor.chains import create_supervisor_chain
 from app.config import config
 
-# from langgraph.types import StreamWriter
-from langgraph.config import get_stream_writer
-
 
 class Supervisor(BaseNode):
     def __init__(self, name: str = "Supervisor", **kwargs):
@@ -25,8 +22,6 @@ class Supervisor(BaseNode):
                 "reason": response.reason,
             }
         else:
-            # writer = get_stream_writer()
-            # writer(response.notification)
             return {
                 "next": response.next,
                 "reason": response.reason,

@@ -36,5 +36,6 @@ template: |
   <important>
   - Make sure to verify the recipient's correct email address
   - Be sure to ask the user what the email subject line should be
+  - Email users can't see markdown, so keep it concise in text.
   </important>  
 input_variables: []

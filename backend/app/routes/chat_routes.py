@@ -4,9 +4,10 @@ from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
 
 from app.agents.supervisor.graph import create_graph
+from app.agents.place_researcher.chains import PlaceInfo
 from langgraph.checkpoint.memory import MemorySaver
 import json
-
+from langchain_core.messages import HumanMessage
 import os
 
 # PostgreSQL 연결 정보 (환경변수에서 가져오기)
@@ -46,6 +47,13 @@ class StateRequest(BaseModel):
 class UpdateStateRequest(BaseModel):
     thread_id: str
     messages: Dict[str, Any]
+
+
+class UpdateSelectedPlacesRequest(BaseModel):
+    """선택된 장소 업데이트 요청"""
+
+    thread_id: str
+    selected_places: List[Dict[str, Any]]
 
 
 class ResumeRequest(BaseModel):
@@ -108,6 +116,15 @@ async def get_state(request: StateRequest):
                 messages = task.state.values.get("messages", [])
                 last_message = messages[-1] if messages else None
 
+                # 서브 그래프 상태에서 추천 장소 정보 추출
+                places = task.state.values.get("places", [])
+                if places:
+                    # PlaceInfo 객체들을 딕셔너리로 변환
+                    recommended_places = []
+                    for place in places:
+                        recommended_places.append(place.model_dump())
+                    state_data["recommended_places"] = recommended_places
+
                 task_data = {
                     "config": task.state.config,
                     "last_message": (
@@ -151,6 +168,89 @@ async def update_state(request: UpdateStateRequest):
 
         return {"success": True}
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@chat_router.post("/chat/update_selected_places")
+async def update_selected_places(request: UpdateSelectedPlacesRequest):
+    """선택된 장소 정보 업데이트"""
+    try:
+        config = {"configurable": {"thread_id": request.thread_id}}
+        snapshot = graph.get_state(config, subgraphs=True)
+
+        if not snapshot.tasks:
+            raise HTTPException(status_code=400, detail="No active tasks to update")
+
+        # 기존 선택된 장소들 가져오기
+        existing_selected_places = snapshot.tasks[0].state.values.get(
+            "selected_places", []
+        )
+        # 선택된 장소를 PlaceInfo 객체로 변환
+        new_selected_places = []
+        for place_dict in request.selected_places:
+            try:
+                # place_id 매핑 확인 (다양한 키 시도)
+                place_id = (
+                    place_dict.get("place_id")
+                    or place_dict.get("id")
+                    or place_dict.get("name", "")
+                    + "_"
+                    + str(hash(place_dict.get("address", "")))
+                )
+
+                place_info = PlaceInfo(
+                    name=place_dict.get("name", ""),
+                    address=place_dict.get("address", ""),
+                    latitude=float(place_dict.get("latitude", 0.0)),
+                    longitude=float(place_dict.get("longitude", 0.0)),
+                    rating=float(place_dict.get("rating", 0.0)),
+                    reviews=place_dict.get("reviews", []) or [],
+                    place_id=place_id,
+                    reason=place_dict.get("reason", ""),
+                )
+                new_selected_places.append(place_info)
+            except Exception as e:
+                continue
+
+        # 기존 장소와 새 장소를 합치기 (name + address 조합으로 중복 제거)
+        combined_places = list(existing_selected_places)  # 기존 장소 복사
+
+        # 기존 장소들의 (name, address) 조합 추출
+        existing_place_keys = set()
+        for place in existing_selected_places:
+            if hasattr(place, "name") and hasattr(place, "address"):
+                key = (place.name.strip().lower(), place.address.strip().lower())
+                existing_place_keys.add(key)
+
+        # 새로운 장소들을 추가 (중복 방지)
+        for new_place in new_selected_places:
+            new_key = (
+                new_place.name.strip().lower(),
+                new_place.address.strip().lower(),
+            )
+            if new_key not in existing_place_keys:
+                combined_places.append(new_place)
+                existing_place_keys.add(new_key)  # 중복 방지를 위해 추가
+
+        # 서브 그래프 상태의 selected_places 업데이트
+        task_config = snapshot.tasks[0].state.config
+        update_data = {
+            "selected_places": combined_places,
+            "messages": HumanMessage(
+                content=f"선택: {','.join([p.name for p in combined_places])}"
+            ),
+        }
+        print("*" * 100)
+        print(update_data["messages"])
+        print("*" * 100)
+        graph.update_state(task_config, update_data)
+
+        return {"success": True, "selected_count": len(combined_places)}
+    except Exception as e:
+        print(f"selected_places 업데이트 오류: {e}")
+        import traceback
+
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 

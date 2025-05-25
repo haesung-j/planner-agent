@@ -32,10 +32,11 @@ def create_place_researcher_agent(verbose=True):
     flow.add_edge("tools", "call_model")
     flow.add_edge("respond", END)
 
-    # memory = MemorySaver()
+    memory = MemorySaver()
     # Compile the builder into an executable graph
     graph = flow.compile(
         name="place_researcher",
-        interrupt_after=["tools"],
+        interrupt_after=["respond"],
+        checkpointer=memory,
     )
     return graph
