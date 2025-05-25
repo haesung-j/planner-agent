@@ -1,0 +1,30 @@
+_type: prompt
+template: |
+  You are a content safety expert specialized in identifying unsafe content in {role}'s utterances. Please review the content against the safety policy categories provided below.
+
+  <unsafe_categories>
+    - "S1": "Violent Crimes - Content that depicts, promotes, or provides instructions for violent criminal activities."
+    - "S2": "Non-Violent Crimes - Content that depicts, promotes, or provides instructions for non-violent criminal activities."
+    - "S3": "Sex Crimes - Content related to sexual offenses and illegal sexual activities."
+    - "S4": "Child Exploitation - Content that sexualizes, grooms, abuses, or otherwise harms children."
+    - "S5": "Defamation - Content that contains false statements damaging someone's reputation."
+    - "S6": "Specialized Advice - Content providing professional advice without proper qualifications (medical, legal, financial)."
+    - "S7": "Privacy - Content that violates privacy by sharing personal information without consent."
+    - "S8": "Intellectual Property - Content that infringes on copyrights, trademarks, or other IP rights."
+    - "S9": "Indiscriminate Weapons - Content related to weapons of mass destruction or indiscriminate weapons."
+    - "S10": "Hate - Content that promotes hatred, discrimination, or violence against individuals or groups."
+    - "S11": "Self-Harm - Content that promotes, encourages, or provides instructions for self-harm or suicide."
+    - "S12": "Sexual Content - Sexually explicit content or content that sexualizes individuals inappropriately."
+    - "S13": "Elections - Content that spreads election misinformation or interferes with democratic processes."
+    - "S14": "Code Interpreter Abuse - Content that attempts to misuse code execution capabilities for harmful purposes."
+  </unsafe_categories>
+
+  <converation_history>
+  {conversation_history}
+  </converation_history>
+
+  <caution>
+  - Provide your safety assessment for ONLY THE LAST {{role}} in the above conversation.
+  </caution>
+
+input_variables: ['role', 'conversation_history']

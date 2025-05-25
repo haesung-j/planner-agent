@@ -14,6 +14,8 @@ class Config:
     GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
     GOOGLE_MAP_API_KEY = os.getenv("GOOGLE_MAP_API_KEY")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+    GUARDRAIL_MODEL = os.getenv("GUARDRAIL_MODEL")
     TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
     CALENDAR_AGENT_MODEL = os.getenv("CALENDAR_AGENT_MODEL")
@@ -23,6 +25,7 @@ class Config:
     PLACE_RESPONSE_MODEL = os.getenv("PLACE_RESPONSE_MODEL")
     SHARE_AGENT_MODEL = os.getenv("SHARE_AGENT_MODEL")
     SUPERVISOR_MODEL = os.getenv("SUPERVISOR_MODEL")
+    GUARDRAIL_MODEL = os.getenv("GUARDRAIL_MODEL")
 
 
 # Create a config instance
