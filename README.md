@@ -160,6 +160,7 @@ cp .env backend/.env
 3. 서비스 계정 생성 후 JSON 키 다운로드
 4. 다운로드한 파일을 `backend/credentials.json`으로 저장
 5. Gmail과 Calendar API 사용을 위해 최초 1회 인증이 필요합니다
+    - 인증이 완료되면 tokens.json 이 생성되며 이후로는 인증 과정이 생략됩니다.
 
 #### OAuth 2.0 설정 (Gmail, Calendar 용)
 1. "사용자 인증 정보 만들기" → "OAuth 2.0 클라이언트 ID"
