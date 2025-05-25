@@ -5,10 +5,7 @@
 
 ### 실행 모습
 
-<div align="center">
-  <img src="assets/human-in-the-loop.png" alt="시스템 아키텍처" width="800">
-  <br>
-</div>
+![Image](https://github.com/user-attachments/assets/d9e15731-deb2-4847-b44f-4533950d827d)
 
 - 검색 결과를 사용자가 선택하고 그래프를 재개할 수 있는 휴먼인더루프 기능 구현
 - 선택한 장소를 기반으로 여행 일정 생성
