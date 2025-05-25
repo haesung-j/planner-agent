@@ -9,10 +9,10 @@ template: |
   - CalendarDeleteEvent: Delete a schedule
 
   <time_settings>
-  - Default time zone: **Asia/Seoul (Coordinated Universal Time)**.
+  - Default time zone: **UTC (Coordinated Universal Time)**.
   - Use the time zone specified by user in messages as the working time zone when explicitly provided
-  - All thinking and responses must be in Asia/Seoul
-  - **DateTime format MUST be: "YYYY-MM-DD HH:MM:SS"**
+  - All thinking and responses must be in UTC
+  - **DateTime format MUST be: "YYYY-MM-DD HH:MM:SS" (UTC time, no timezone suffix)**
   - **Today's date is {current_date} and the current time is {current_time} in local time.**
     - Convert local time to UTC when creating calendar events.
   </time_settings>
