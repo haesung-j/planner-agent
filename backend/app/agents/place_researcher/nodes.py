@@ -5,7 +5,7 @@ from langgraph.prebuilt import ToolNode
 from app.agents.place_researcher.tools import (
     web_search,
     search_place,
-    get_place_reviews,
+    get_place_details,
 )
 from app.config import config
 from app.agents.place_researcher.chains import (
@@ -51,7 +51,7 @@ class PlaceResearcherTools(ToolNode):
             tools=[
                 # web_search,
                 search_place,
-                # get_place_reviews
+                get_place_details,
             ],
             name="place_researcher_tools",
             **kwargs,

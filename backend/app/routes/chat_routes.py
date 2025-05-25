@@ -73,7 +73,7 @@ class HistoryRequest(BaseModel):
 async def chat_stream(request: ChatRequest):
 
     query = request.query
-    config = {"configurable": {"thread_id": request.thread_id}}
+    config = {"configurable": {"thread_id": request.thread_id}, "recursion_limit": 25}
 
     async def event_stream():
         try:
@@ -158,7 +158,10 @@ async def update_state(request: UpdateStateRequest):
 async def resume_graph(request: ResumeRequest):
     """인터럽트된 그래프 재개"""
     try:
-        config = {"configurable": {"thread_id": request.thread_id}}
+        config = {
+            "configurable": {"thread_id": request.thread_id},
+            "recursion_limit": 25,
+        }
         snapshot = graph.get_state(config, subgraphs=True)
         print(snapshot.tasks[0].state.values["messages"])
 

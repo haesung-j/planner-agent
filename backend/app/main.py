@@ -1,8 +1,15 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.health_check import health_router
 from app.routes.chat_routes import chat_router
-import os
+from app.config import config
+
+
+# tracing
+os.environ["LANGCHAIN_TRACING_V2"] = config.LANGCHAIN_TRACING_V2
+os.environ["LANGCHAIN_PROJECT"] = config.LANGCHAIN_PROJECT
+os.environ["LANGCHAIN_API_KEY"] = config.LANGCHAIN_API_KEY
 
 app = FastAPI()
 

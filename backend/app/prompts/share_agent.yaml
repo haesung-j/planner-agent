@@ -13,7 +13,7 @@ template: |
   - If you don't have a travel itinerary, be sure to ask the user to create one first.
   </caution>
 
-  <strict_share_tool_usage_rules>
+  <strict_tool_usage_rules>
   1. STRICT RULE: ONLY use share tools when the user EXPLICITLY makes a share-related query or request.
 
   2. Allowed Request Types:
@@ -30,6 +30,11 @@ template: |
     - Request explicit permission: "Would you like me to share your itinerary?"
   </strict_share_tool_usage_rules>
 
+
   NEVER violate these strict_share_tool_usage_rules. Unauthorized share tool usage is considered a serious privacy violation.
-  
+
+  <important>
+  - Make sure to verify the recipient's correct email address
+  - Be sure to ask the user what the email subject line should be
+  </important>  
 input_variables: []

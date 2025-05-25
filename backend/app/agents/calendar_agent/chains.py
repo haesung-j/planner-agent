@@ -14,7 +14,7 @@ def create_calendar_chain(
         model = ChatOpenAI(model=model_name, temperature=0.2)
     prompt = load_prompt("app/prompts/calendar_agent.yaml").template
 
-    model_with_tools = model.bind_tools(calendar_tools)
+    model_with_tools = model.bind_tools(calendar_tools, parallel_tool_calls=False)
 
     prompt = ChatPromptTemplate.from_messages(
         [

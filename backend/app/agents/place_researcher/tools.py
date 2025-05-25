@@ -34,24 +34,28 @@ def search_place(query: str) -> str:
     Searches for places using the Google Places API based on a natural language query.
 
     This function allows for text-based searches of places, businesses, and points of interest
-    using the Google Maps Platform. It accepts natural language queries and returns multiple
-    place results that match the search criteria.
+    using the Google Maps Platform. It accepts natural language queries and returns up to 5
+    place results that match the search criteria. For better results, use general category
+    terms rather than specific business names.
 
     Args:
-        query: A string containing the search query, which can be a natural language phrase
-              (e.g., 'Gangnam cafe', 'Seoul Station restaurant')
+        query: A string containing the search query. Recommended to use general terms
+              for broader results (e.g., 'Gangnam cafe', 'Hongdae restaurant', 'Seoul museum')
+              rather than specific business names.
 
     Returns:
-        A list of places matching the query, including basic information such as name,
+        A list of up to 5 places matching the query, including basic information such as name,
         address, rating, and most importantly the place_id which can be used with
         get_place_reviews to retrieve more detailed information.
 
     Usage example:
-        search_place("Hongdae family restaurant")
+        search_place("Hongdae cafe")  # Returns multiple cafe options in Hongdae area
+        search_place("Seoul traditional restaurant")  # Returns various traditional restaurants
     """
     response = client.places(query=query, language="ko")
     places = []
-    for result in response.get("results", []):
+    # Limit results to 5 places
+    for result in response.get("results", [])[:5]:
         place = {
             "id": result.get("place_id", f"{result.get('name', '')}"),
             "name": result.get("name", ""),
@@ -65,7 +69,7 @@ def search_place(query: str) -> str:
 
 
 @tool(parse_docstring=True)
-def get_place_reviews(place_id: str) -> str:
+def get_place_details(place_id: str) -> str:
     """
     Retrieves detailed information and reviews for a specific place using the Google Maps API.
 

@@ -8,7 +8,7 @@ from langchain_core.runnables import RunnableSequence
 from app.agents.place_researcher.tools import (
     web_search,
     search_place,
-    get_place_reviews,
+    get_place_details,
 )
 from app.config import config
 
@@ -45,7 +45,7 @@ def create_place_researcher_chain(model_name: str) -> RunnableSequence:
     tools = [
         # web_search,
         search_place,
-        # get_place_reviews
+        get_place_details,
     ]
 
     prompt = load_prompt("app/prompts/place_researcher.yaml").template
