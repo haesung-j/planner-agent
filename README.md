@@ -2,6 +2,20 @@
 
 멀티 에이전트 AI 시스템을 활용하여 자연스러운 대화를 통해 개인화된 여행 일정을 생성하는 지능형 여행 계획 서비스입니다.
 
+
+### 실행 모습
+
+<div align="center">
+  <img src="assets/human-in-the-loop.png" alt="시스템 아키텍처" width="800">
+  <br>
+</div>
+
+- 검색 결과를 사용자가 선택하고 그래프를 재개할 수 있는 휴먼인더루프 기능 구현
+- 선택한 장소를 기반으로 여행 일정 생성
+
+
+
+
 ## 시스템 아키텍처
 
 <div align="center">
@@ -17,6 +31,15 @@
 | **프론트엔드** | Streamlit | 8501 | 대화형 웹 인터페이스 |
 | **백엔드** | FastAPI | 8000 | 멀티 에이전트 시스템 기반 REST API |
 
+
+## 기술 스택
+
+- **백엔드**: FastAPI, LangGraph, LangChain
+- **프론트엔드**: Streamlit
+- **AI 모델**: OpenAI Model, Llama Guard(using Groq)
+- **외부 API**: Google Maps, Google Calendar, Gmail
+- **인프라**: Docker, Nginx
+
 ### 주요 기능
 <div align="center">
   <img src="assets/rough_graph.png" alt="그래프 전체" width="800">
@@ -30,21 +53,15 @@
     - **calendar_agent**: Google Calendar API를 통해 여행 일정을 캘린더에 등록하는 일정 관리 에이전트
     - **share_agent**: Gmail API를 활용하여 완성된 여행 계획을 이메일로 공유하는 에이전트
     - **message_agent**: 사용자와의 모든 대화를 담당하며, 다른 에이전트들의 작업 결과를 자연스럽게 전달하는 대화형 인터페이스 에이전트
-- **Human-in-the-loop**: 장소 검색 결과 중 사용자가 직접 선택하여 개인화된 여행 계획 수립
 - **가드레일**: Llama Guard를 활용한 사용자 입력 안전성 검증 및 부적절한 요청 필터링
-
-
-
-
-### 실행 모습
+- **Human-in-the-loop**: 장소 검색 결과 중 사용자가 직접 선택하여 개인화된 여행 계획 수립
 
 <div align="center">
-  <img src="assets/human-in-the-loop.png" alt="시스템 아키텍처" width="800">
+  <img src="assets/place_researcher.png" width="250">
   <br>
+  <m>place_researcher: 장소 검색 결과를 사용자가 선택</m>
 </div>
 
-- 검색 결과를 사용자가 선택하고 그래프를 재개할 수 있는 휴먼인더루프 기능 구현
-- 선택한 장소를 기반으로 여행 일정 생성
 
 
 ## 환경 설정
@@ -91,7 +108,7 @@ cp .env backend/.env
 
 
 ---
-
+## 실행 방법
 ```bash
 # 저장소 복제 및 애플리케이션 실행
 git clone <repository-url>
@@ -101,10 +118,3 @@ docker-compose up -d
 
 `http://localhost`으로 접속할 수 있습니다.
 
-## 기술 스택
-
-- **백엔드**: FastAPI, LangGraph, LangChain
-- **프론트엔드**: Streamlit
-- **AI 모델**: OpenAI GPT
-- **외부 API**: Google Maps, Google Calendar, Gmail
-- **인프라**: Docker, Nginx

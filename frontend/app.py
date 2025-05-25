@@ -164,7 +164,7 @@ def main():
 
         else:
             tool_name = last_message["name"]
-            st.info(f"{tool_name} 실행중...")
+            st.info(f"잠시만 기다려주세요...")
             # 다른 tool의 경우 그래프 재개
             with st.chat_message("assistant"):
                 message_placeholder = st.empty()

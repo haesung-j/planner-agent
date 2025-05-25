@@ -19,7 +19,7 @@ def create_message_chain(model_name: str, itinerary: str | None) -> RunnableSequ
             MessagesPlaceholder("messages"),
             (
                 "system",
-                "If a travel itinerary has been completed, please organize and present the finalized itinerary content in a user-friendly format.\n{itinerary}",
+                "If a travel itinerary has been completed, display the finalized itinerary content in a user-friendly format ONE TIME ONLY. After showing the itinerary once, do not display it again unless the user specifically asks to see it again.\n{itinerary}\n ",
             ),
         ]
     )
