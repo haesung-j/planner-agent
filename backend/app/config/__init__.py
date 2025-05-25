@@ -27,6 +27,9 @@ class Config:
     SUPERVISOR_MODEL = os.getenv("SUPERVISOR_MODEL")
     GUARDRAIL_MODEL = os.getenv("GUARDRAIL_MODEL")
 
+    KAKAO_ACCESS_TOKEN = os.getenv("KAKAO_ACCESS_TOKEN")
+    KAKAO_REFRESH_TOKEN = os.getenv("KAKAO_REFRESH_TOKEN")
+
 
 # Create a config instance
 config = Config()

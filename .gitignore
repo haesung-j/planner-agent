@@ -180,3 +180,4 @@ cython_debug/
 # Google Calendar
 credentials.json
 token.json
+kakao_tokens.json
