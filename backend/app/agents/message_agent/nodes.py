@@ -13,8 +13,9 @@ class MessageAgent(BaseNode):
         self.model_name = config.GENERAL_CONVERSATION_MODEL
 
     async def arun(self, state):
-        messages = state["messages"]
-        chain = create_message_chain(self.model_name)
+        messages = state.get("messages", [])
+        itinerary = state.get("itinerary", "")
+        chain = create_message_chain(self.model_name, itinerary)
 
         writer = get_stream_writer()
 

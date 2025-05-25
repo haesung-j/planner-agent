@@ -4,7 +4,7 @@ from langchain_core.runnables import RunnableSequence
 from app.config import config
 
 
-def create_message_chain(model_name: str) -> RunnableSequence:
+def create_message_chain(model_name: str, itinerary: str | None) -> RunnableSequence:
     if model_name == "o3-mini":
         model = ChatOpenAI(model=model_name, temperature=1.0)
     elif model_name == "gpt-4.1-mini":
@@ -17,8 +17,14 @@ def create_message_chain(model_name: str) -> RunnableSequence:
         [
             ("system", prompt),
             MessagesPlaceholder("messages"),
+            (
+                "system",
+                "If a travel itinerary has been completed, please organize and present the finalized itinerary content in a user-friendly format.\n{itinerary}",
+            ),
         ]
     )
+
+    prompt = prompt.partial(itinerary=itinerary)
 
     chain = prompt | model
 
